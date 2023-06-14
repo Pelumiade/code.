@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>LMS</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{% static 'assets/vendors/feather/feather.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/vendors/ti-icons/css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/vendors/css/vendor.bundle.base.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/vendors/mdi/css/materialdesignicons.min.css' %}">
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="{% static 'assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/vendors/ti-icons/css/themify-icons.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'assets/js/select.dataTables.min.css' %}">
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{% static 'assets/css/vertical-layout-light/style.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/vertical-layout-light/lms.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+  <!-- endinject -->
+  <link rel="shortcut icon" href="{% static 'assets/images/X.png' %}" />
+
+  <style>
+    .card-grey {
+      background: #54565b;
+    }
+
+    .card .dashboard-card {
+      color: #fff;
+    }
+
+    .card .dashboard-card-body {
+      color: #fff;
+    }
+
+    .card-red {
+      background: #e1261c;
+    }
+
+    .card-brown {
+      background: #8b4513;
+    }
+
+    .card-green {
+      background: #009639;
+    }
+
+    .chart {
+      color: black;
+    }
+
+
+
+  </style>
+</head>
+<body>
+    <style>
+      .messages.vanish {
+        opacity: 0;
+        transition: opacity 0.5s ease-out;
+      }
+
+      .sidebar .nav:not(.sub-menu) > .nav-item:hover > .nav-link, .sidebar .nav:not(.sub-menu) > .nav-item:hover[aria-expanded="true"] {
+        background: #e1261c;
+        color: #fff;
+      }
+      
+      .sidebar .nav:not(.sub-menu) > .nav-item > .nav-link {
+        margin: 0;
+      }
+      
+      .sidebar .nav:not(.sub-menu) > .nav-item > .nav-link[aria-expanded="true"] {
+        border-radius: 8px 8px 0 0;
+        background: #e1261c;
+        color: #fff;
+
+      .content-wrapper {
+        background-color: #EBEBEC;
+      }
+      }
+    </style>
+    <div class="container-scroller">
+      <!-- partial:partials/_navbar.html -->
+      <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row" style="background: #e1261c;">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+          <a class="navbar-brand brand-logo mr-5" href="{% url 'lms_admin:dashboard' %}"><img src="{% static 'assets/images/lms_logo.svg' %}" class="mr-2" alt="logo"/></a>
+          <a class="navbar-brand brand-logo-mini" href="{% url 'lms_admin:dashboard' %}"><img src="{% static 'assets/images/X_lms_logo.svg' %}" alt="logo"/></a>
+        </div>
+
+        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="icon-menu"></span>
+          </button>
+
+          <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item">
+              {% if user.is_authenticated %}
+                <p class="mb-0 font-weight-normal float-left">
+                  <a class="nav-link" href="{% url 'accounts:change_password' %}">
+                    <i class="mdi mdi-logout"></i>
+                    Change password
+                  </a>
+                </p>
+
+                    
+                <p class="mb-0 font-weight-normal float-left" style="margin-left: 10px;">
+                  <a class="nav-link" href="{% url 'accounts:logout' %}">
+                    <i class="mdi mdi-logout"></i>
+                    Logout
+                  </a>
+                </p>
+                
+              {% else %}
+                <p><a class="nav-link" href="{% url 'accounts:login' %}">Login<a></p>  
+              {% endif %}
+            </li>
+            
+            <li class="nav-item nav-profile dropdown">
+              <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                {% comment %} <img src="#" alt="profile"/> {% endcomment %}
+              </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                <a class="dropdown-item">
+                  <i class="ti-settings text-primary"></i>
+                  Settings
+                </a>
+                {% if user.is_authenticated %}
+                <a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                  <i class="mdi mdi-logout"></i>
+                  Logout
+                </a>
+                
+                {% endif %}
+              </div>
+            </li>
+          </ul>
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="icon-menu"></span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="container-fluid page-body-wrapper">
+        {% block navbar %}
+          
+        {% endblock %}
+          
+        <div class="main-panel">
+          {% if messages %}
+              {% for message in messages %}
+                  <div class="alert alert-
+                    {% if message.tags == "error" %}
+                      danger
+                    {% else%}
+                      {{ message.tags }}
+                    {% endif %}">
+                        {{ message }}
+                  </div>
+              {% endfor %}
+          {% endif %}
+
+        
+
+                {% block content %}
+
+                {% endblock %}
+
+          
+              
+          
+
+            <footer class="footer">
+                <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                  <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021.  Premium <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from BootstrapDash. All rights reserved.</span>
+                  <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+                </div>
+            </footer>
+          </div>
+      <!-- main-panel ends -->
+
+      </div>
+    <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <script>
+      const messages = document.querySelectorAll('.messages');
+
+      // Remove each message after 5 seconds
+      messages.forEach(message => {
+        setTimeout(() => {
+            message.classList.add('vanish');
+          }, 5000);
+          });
+    </script>
+      
+    <!-- plugins:js -->
+    <script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{% static 'assets/js/dataTables.select.min.js' %}"></script>
+
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{% static 'assets/js/template.js' %}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="{% static 'assets/js/cohort_list.js' %}"></script>
+    <!-- End custom js for this page-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Import Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.3/dist/apexcharts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    {% block script %} {% endblock %}
+</body>
+
+</html>
